@@ -12,7 +12,6 @@ Currently, two official plugins are available:
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 
 
-
 -->Authenticated user
    -->Sign Page
    -->Home Page
@@ -21,10 +20,16 @@ If you are developing a production application, we recommend using TypeScript wi
       --> List of Movies
 -->Non-authenticated user
    -->Login Page
+
+---------------------------------------------------------------
+
 netflix-gpt
+
 -->Configure project with vite react-app
 -->Set remote repo 
 -->Start building application
   -->Setup routing
   -->Build Header
   -->Build Login form
+  -->Add Validation
+  -->Add Authentication -- setup backend
