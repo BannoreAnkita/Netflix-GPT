@@ -33,3 +33,13 @@ netflix-gpt
   -->Build Login form
   -->Add Validation
   -->Add Authentication -- setup backend
+  -->Deploy the app on firebase 
+      -->npm i firebase
+      -->npm i -g firebase-tools
+      -->firebase login 
+      -->firebase init
+      -->firebase deploy
+  ---> Deploy app to production
+  ---> Authenticate user with email/password (Do sign in/sign up follow firebase doc)
+  ---> Setup redux
+  --->Created redux store for user
