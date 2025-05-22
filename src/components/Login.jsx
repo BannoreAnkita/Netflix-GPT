@@ -10,9 +10,15 @@ import { auth } from "../utils/firebase.js";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice.js";
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [toggleSignInForm, setToggleSignInForm] = useState(true);
   const [errorMsgEmail, setErrorMsgEmail] = useState("");
   const [error, setError] = useState("");
@@ -28,38 +34,53 @@ const Login = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    setErrorMsgEmail(validateEmail(email.current.value.trim()));
-    setErrorMsgPassword(validatePassword(password.current.value.trim()));
-    if (!toggleSignInForm) {
+    const emailValidate = validateEmail(email.current.value.trim());
+    const passValidate = validatePassword(password.current.value.trim());
+
+    setErrorMsgEmail(emailValidate);
+    setErrorMsgPassword(passValidate);
+    if (!toggleSignInForm && emailValidate === true && passValidate === true) {
       createUserWithEmailAndPassword(
         auth,
         email.current.value,
         password.current.value
       )
         .then((userCredential) => {
-          // Signed up
-          const user = userCredential.user;
-          console.log(user);
-          // ...
+          updateProfile(userCredential.user, {
+            displayName: name.current.value,
+            photoURL: "https://avatars.githubusercontent.com/u/75256312?v=4",
+          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  email: email,
+                  displayName: displayName,
+                  photoURL: photoURL,
+                })
+              );
+            })
+            .catch((error) => {
+              console.log(auth.currentUser);
+            });
+          navigate("/browse");
         })
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          setError(errorCode + errorMessage);
-          // ..
+          setError(error.message);
         });
     } else {
-      signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
         .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-           console.log(user);
+          navigate("/browse");
           // ...
         })
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-            setError( errorMessage);
+          setError(error.message);
         });
     }
   };
